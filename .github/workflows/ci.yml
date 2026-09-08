@@ -1,3 +1,15 @@
+# ⚠️ WORKFLOW NÀY ĐANG TẮT — xem docs/VE-CI.md
+#
+# Lý do: tài khoản GitHub của chủ repo bị khoá Actions do một giao dịch thanh
+# toán bị ngân hàng từ chối. Không liên quan tới code của nhóm. File này giữ
+# nguyên để bật lại khi gỡ được, chỉ cần chạy:
+#
+#     gh workflow enable ci.yml
+#
+# Trong lúc chờ, cả nhóm chạy test ở máy trước khi tạo Pull Request:
+#
+#     python -m pytest
+
 name: CI
 
 on:

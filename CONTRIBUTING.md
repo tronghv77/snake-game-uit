@@ -17,6 +17,10 @@
 - [ ] Không commit nhầm thư mục `.venv/` hay `__pycache__/`.
 - [ ] Commit message viết theo mẫu `feat:` / `fix:` / `docs:` / `refactor:`.
 
+> ⚠️ **Bước chạy `pytest` là bắt buộc, không được bỏ.** CI tự động trên GitHub
+> đang tắt tạm thời nên không ai chạy test giùm bạn nữa — xem lý do ở
+> [docs/VE-CI.md](docs/VE-CI.md).
+
 ## Pull Request
 - Tiêu đề mô tả rõ việc đã làm.
 - Mô tả kèm ảnh chụp màn hình nếu có thay đổi giao diện.
