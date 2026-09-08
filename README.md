@@ -15,6 +15,7 @@ Game rắn săn mồi kinh điển, viết bằng **Python + Pygame**.
 
 Bảng phân công tóm tắt: [docs/PHAN-CONG.md](docs/PHAN-CONG.md)
 **Mô tả công việc chi tiết từng người: [docs/MO-TA-CONG-VIEC.md](docs/MO-TA-CONG-VIEC.md)**
+Sơ đồ trạng thái và sơ đồ lớp: [docs/SO-DO.md](docs/SO-DO.md)
 
 ---
 
