@@ -156,3 +156,88 @@ Chưa biết Git thì không sao, hướng dẫn từ số 0 ở đây:
 https://github.com/tronghv77/snake-game-uit/blob/main/docs/HUONG-DAN-GIT.md
 
 Có gì cứ nhắn mình 👌
+
+
+==========================================================
+CẬP NHẬT 08/09/2026 — SAU KHI TÍN NỘP PR ĐẦU TIÊN
+==========================================================
+
+--- TIN NHẮN 1: GỬI NHÓM (kèm 3 ảnh giao diện) ---
+
+🎉 Tín vừa nộp Pull Request đầu tiên của nhóm rồi mọi người ơi!
+
+Phần giao diện: vẽ rắn, vẽ mồi, điểm số, menu, màn hình game over, cả âm thanh nữa. Mình đã tải về chạy thử, gửi ảnh cho cả nhóm xem đây 👆
+
+Mình khen thật lòng: code sạch, đúng chuẩn, có chỗ Tín làm còn hay hơn mình dặn. Cái hay nhất là khi chưa có file âm thanh thì code tự tạo ra tiếng beep luôn, không bị lỗi. Chỗ này lát viết báo cáo mình sẽ đưa vào.
+
+Mình đã review chi tiết trong PR, Tín vào đọc nha:
+https://github.com/tronghv77/snake-game-uit/pull/10
+
+Có 3 chỗ nhỏ cần sửa rồi mình merge liền:
+1. Dòng "ESC de thoat" ở menu bị viền khung cắt ngang (nhìn ảnh 1 là thấy)
+2. Menu còn thiếu tên 3 đứa mình ở dưới cùng
+3. Menu chưa cho biết đang chọn mức khó nào
+
+Trong PR mình có ghi rõ sửa ở dòng nào, sửa thế nào rồi.
+
+
+--- TIN NHẮN 2: GỬI RIÊNG DIỄM ---
+
+Diễm ơi, Tín nộp bài xong rồi đó 😄 Giờ chỉ còn chờ mỗi phần của Diễm là game chơi được thật.
+
+Diễm bấm Accept lời mời giúp mình trước nha, mình mời từ hôm qua rồi mà chưa thấy:
+https://github.com/tronghv77/snake-game-uit/invitations
+
+Xong rồi tải code về:
+git clone https://github.com/tronghv77/snake-game-uit.git
+cd snake-game-uit
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python main.py
+
+Chạy lên là thấy menu game luôn, chọn độ khó bấm 1/2/3, SPACE vào chơi. Phần khung mình với Tín làm xong hết rồi, giờ rắn chưa nhúc nhích được là vì thiếu đúng phần của Diễm thôi 😅
+
+Việc của Diễm ở đây, mình ghi rõ từng hàm cần viết gì rồi:
+https://github.com/tronghv77/snake-game-uit/issues/2
+
+Kẹt chỗ nào chụp màn hình gửi mình nha, đừng ngại.
+
+
+--- TIN NHẮN 3: GỬI NHÓM ---
+
+⚠️ Một thay đổi nhỏ cả nhóm cần biết
+
+Mình đã tắt phần kiểm tra tự động (CI) trên GitHub.
+
+Lý do: tài khoản GitHub của mình bị khoá chức năng đó vì một giao dịch thẻ bị ngân hàng từ chối, chuyện cá nhân của mình, không liên quan gì tới code của nhóm. Nhưng nó làm mỗi lần push code lên đều hiện dấu X đỏ dù code hoàn toàn đúng — để vậy lúc nộp bài thầy/cô nhìn vào tưởng nhóm mình code lỗi thì oan.
+
+👉 Từ giờ trước khi tạo Pull Request, mọi người TỰ CHẠY lệnh này ở máy:
+
+python -m pytest
+
+Thấy chữ "passed" màu xanh là ok. Thấy "failed" thì sửa xong hãy tạo PR.
+
+Chỉ tốn 4 giây thôi, đừng bỏ qua bước này nha, vì giờ không còn ai chạy giùm mình nữa.
+
+Giải thích đầy đủ mình ghi ở đây:
+https://github.com/tronghv77/snake-game-uit/blob/main/docs/VE-CI.md
+
+
+--- TIN NHẮN 4: GỬI RIÊNG TÍN ---
+
+À Tín ơi, còn một việc nhỏ nữa.
+
+Tín gửi PR bằng cách fork repo — cách đó vẫn chạy tốt, không sai gì hết. Nhưng Tín chưa bấm Accept lời mời vào repo, nên đang bị tính là người ngoài.
+
+Bấm Accept ở đây nha:
+https://github.com/tronghv77/snake-game-uit/invitations
+
+Accept xong thì lần sau khỏi cần fork nữa, làm gọn hơn nhiều:
+git clone https://github.com/tronghv77/snake-game-uit.git
+cd snake-game-uit
+git checkout -b feat/sua-giao-dien
+
+Sửa xong 3 chỗ mình góp ý thì commit rồi push lên nhánh đó, mình merge luôn.
+
+Với lại phần "Việc đã làm" trong PR Tín để trống, bổ sung giúp mình vài dòng với mấy tấm ảnh giao diện nha — lúc viết báo cáo nhóm mình cần mấy cái đó.
