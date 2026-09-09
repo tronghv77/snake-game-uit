@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="Segoe UI, Tahoma, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#37474f"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#ffffff"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="600" fill="#1c2833">Sơ đồ trạng thái — Snake Game</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#607d8b">Lớp Game, thuộc tính state (src/snake/game.py)</text>
+
+  <!-- diem bat dau -->
+  <circle cx="30" cy="152" r="8" fill="#37474f"/>
+  <line x1="40" y1="152" x2="62" y2="152" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- vong lap chon do kho tren MENU -->
+  <path d="M 115 120 C 105 62 205 62 195 120" fill="none" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="155" y="52" text-anchor="middle" font-size="12" fill="#37474f">1 / 2 / 3</text>
+  <text x="155" y="68" text-anchor="middle" font-size="11" fill="#78909c">chọn độ khó</text>
+
+  <!-- MENU -->
+  <rect x="70" y="120" width="170" height="64" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="155" y="148" text-anchor="middle" font-size="16" font-weight="600" fill="#0d47a1">MENU</text>
+  <text x="155" y="167" text-anchor="middle" font-size="11" fill="#546e7a">chọn độ khó, chờ bắt đầu</text>
+
+  <!-- MENU -> PLAYING -->
+  <line x1="240" y1="152" x2="359" y2="152" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="300" y="143" text-anchor="middle" font-size="12" font-weight="600" fill="#37474f">SPACE</text>
+
+  <!-- PLAYING -->
+  <rect x="365" y="120" width="170" height="64" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="450" y="148" text-anchor="middle" font-size="16" font-weight="600" fill="#1b5e20">PLAYING</text>
+  <text x="450" y="167" text-anchor="middle" font-size="11" fill="#546e7a">rắn đang di chuyển</text>
+
+  <!-- PLAYING -> PAUSED -->
+  <line x1="535" y1="140" x2="654" y2="140" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="595" y="131" text-anchor="middle" font-size="12" font-weight="600" fill="#37474f">P</text>
+
+  <!-- PAUSED -> PLAYING -->
+  <line x1="654" y1="166" x2="535" y2="166" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="595" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#37474f">P</text>
+
+  <!-- PAUSED -->
+  <rect x="660" y="120" width="170" height="64" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="745" y="148" text-anchor="middle" font-size="16" font-weight="600" fill="#e65100">PAUSED</text>
+  <text x="745" y="167" text-anchor="middle" font-size="11" fill="#546e7a">tạm dừng, rắn đứng yên</text>
+
+  <!-- PLAYING -> GAME_OVER -->
+  <line x1="450" y1="184" x2="450" y2="354" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="466" y="258" font-size="12" font-weight="600" fill="#c62828">đâm tường</text>
+  <text x="466" y="276" font-size="12" font-weight="600" fill="#c62828">hoặc cắn thân</text>
+
+  <!-- GAME_OVER -> PLAYING -->
+  <path d="M 365 392 C 285 392 285 240 396 186" fill="none" stroke="#37474f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="258" y="300" text-anchor="middle" font-size="12" font-weight="600" fill="#37474f">SPACE</text>
+  <text x="258" y="317" text-anchor="middle" font-size="11" fill="#78909c">chơi lại từ đầu</text>
+
+  <!-- GAME_OVER -->
+  <rect x="365" y="360" width="170" height="64" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="450" y="388" text-anchor="middle" font-size="16" font-weight="600" fill="#b71c1c">GAME_OVER</text>
+  <text x="450" y="407" text-anchor="middle" font-size="11" fill="#546e7a">hiện điểm, lưu kỷ lục</text>
+
+  <!-- ghi chu -->
+  <rect x="590" y="352" width="270" height="80" rx="8" fill="#fafafa" stroke="#b0bec5" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="606" y="376" font-size="12" font-weight="600" fill="#37474f">Ở mọi trạng thái:</text>
+  <text x="606" y="397" font-size="12" fill="#546e7a">ESC — thoát game</text>
+  <text x="606" y="417" font-size="12" fill="#546e7a">Đóng cửa sổ — thoát game</text>
+
+  <text x="450" y="490" text-anchor="middle" font-size="12" fill="#78909c">Chỉ ở trạng thái PLAYING thì hàm update() mới cho rắn đi. Ba trạng thái còn lại rắn đứng yên.</text>
+  <text x="450" y="512" text-anchor="middle" font-size="12" fill="#78909c">Bốn trạng thái khai báo bằng enum GameState, mỗi trạng thái tự quyết định nhận phím nào và vẽ màn hình nào.</text>
+</svg>
