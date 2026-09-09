@@ -290,3 +290,112 @@ def test_mo_game_doc_lai_duoc_ky_luc_cu(tmp_path):
     g = Game(highscore_path=p)
     assert g.highscore == 250
     pygame.quit()
+
+
+# --- T4: ăn mồi và va chạm -------------------------------------------------
+
+
+def test_van_moi_ran_bat_dau_o_giua_luoi(game):
+    game.reset_round()
+    assert game.snake.head == (config.GRID_WIDTH // 2, config.GRID_HEIGHT // 2)
+    assert len(game.snake.body) == 3
+    assert game.snake.direction == RIGHT
+
+
+def test_moi_khong_bao_gio_sinh_tren_than_ran(game):
+    for _ in range(200):
+        game.reset_round()
+        assert game.food.position not in game.snake.body
+
+
+def test_an_moi_thi_cong_diem_va_dai_ra(game):
+    game.reset_round()
+    do_dai_cu = len(game.snake.body)
+    game.food.position = game.next_head_cell()
+
+    game.step()
+
+    assert game.score == config.SCORE_PER_FOOD
+    assert len(game.snake.body) == do_dai_cu + 1
+
+
+def test_an_moi_xong_thi_moi_moi_khong_nam_tren_than(game):
+    game.reset_round()
+    vi_tri_cu = game.food.position = game.next_head_cell()
+
+    game.step()
+
+    assert game.food.position != vi_tri_cu
+    assert game.food.position not in game.snake.body
+
+
+def test_khong_an_moi_thi_khong_cong_diem(game):
+    game.reset_round()
+    game.food.position = (0, 0)  # xa đầu rắn
+
+    game.step()
+
+    assert game.score == 0
+    assert len(game.snake.body) == 3
+
+
+def test_dam_tuong_thi_thua(game):
+    huong = {
+        "phai": ((config.GRID_WIDTH - 1, 5), RIGHT),
+        "trai": ((0, 5), LEFT),
+        "tren": ((5, 0), UP),
+        "duoi": ((5, config.GRID_HEIGHT - 1), DOWN),
+    }
+    for ten, (o_dau, huong_di) in huong.items():
+        game.reset_round()
+        game.food.position = (0, 0)
+        game.snake.body = [o_dau]
+        game.snake.direction = huong_di
+
+        game.step()
+
+        assert game.state is GameState.GAME_OVER, f"dam tuong {ten} ma khong thua"
+
+
+def test_di_trong_luoi_thi_khong_thua(game):
+    game.reset_round()
+    game.food.position = (0, 0)
+    for _ in range(5):
+        game.step()
+    assert game.state is GameState.PLAYING
+
+
+def test_can_vao_than_minh_thi_thua(game):
+    game.reset_round()
+    game.food.position = (0, 0)
+    # Rắn cuộn lại, đi thêm một bước là đầu chạm đúng đốt thứ hai.
+    game.snake.body = [(10, 10), (11, 10), (11, 11), (10, 11)]
+    game.snake.direction = RIGHT
+
+    game.step()
+
+    assert game.state is GameState.GAME_OVER
+
+
+def test_huong_trong_hang_cho_duoc_ap_dung_khi_di(game):
+    game.reset_round()
+    game.food.position = (0, 0)
+    game.handle_keydown(pygame.K_UP)
+
+    game.step()
+
+    assert game.snake.direction == UP
+
+
+def test_thua_roi_choi_lai_thi_ran_ve_ba_dot(game):
+    game.reset_round()
+    game.food.position = game.next_head_cell()
+    game.step()
+    game.end_round()
+
+    game.handle_keydown(pygame.K_SPACE)
+
+    assert game.state is GameState.PLAYING
+    assert game.score == 0
+    assert len(game.snake.body) == 3
+    assert game.snake.head == (config.GRID_WIDTH // 2, config.GRID_HEIGHT // 2)
