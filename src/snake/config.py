@@ -6,6 +6,8 @@ Mọi con số "ma thuật" (magic number) đều nên đặt tên ở đây tha
 thẳng trong code, để cả nhóm chỉnh một chỗ là toàn bộ game đổi theo.
 """
 
+from pathlib import Path
+
 # --- Kích thước cửa sổ và lưới -------------------------------------------
 CELL_SIZE = 20          # Kích thước một ô vuông (pixel)
 GRID_WIDTH = 30         # Số ô theo chiều ngang
@@ -15,6 +17,14 @@ WINDOW_WIDTH = CELL_SIZE * GRID_WIDTH
 WINDOW_HEIGHT = CELL_SIZE * GRID_HEIGHT
 
 WINDOW_TITLE = "Snake Game - Nhom 3 - UIT"
+
+# --- Giao diện ------------------------------------------------------------
+UI_MARGIN = 2
+UI_OVERLAY_ALPHA = 130
+COLOR_PANEL = (12, 17, 24)
+COLOR_PANEL_BORDER = (70, 88, 104)
+COLOR_ACCENT = (255, 205, 92)
+COLOR_FOOD_HIGHLIGHT = (255, 146, 146)
 
 # --- Tốc độ ---------------------------------------------------------------
 FPS = 60                # Số khung hình mỗi giây
@@ -37,4 +47,11 @@ COLOR_TEXT_DIM = (140, 152, 166)
 SCORE_PER_FOOD = 10
 HIGHSCORE_FILE = "highscore.json"
 
-# TODO(Tín): bổ sung đường dẫn tới file âm thanh và font chữ trong assets/
+# --- Tài nguyên -----------------------------------------------------------
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+ASSETS_DIR = PROJECT_ROOT / "assets"
+SOUNDS_DIR = ASSETS_DIR / "sounds"
+FONTS_DIR = ASSETS_DIR / "fonts"
+SOUND_EAT_PATH = SOUNDS_DIR / "eat.wav"
+SOUND_GAME_OVER_PATH = SOUNDS_DIR / "game_over.wav"
+SOUND_ENABLED = True
