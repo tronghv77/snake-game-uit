@@ -27,6 +27,13 @@ def draw_grid(surface: pygame.Surface) -> None:
         )
 
 
+def _load_font(size: int) -> pygame.font.Font:
+    """Tải font Unicode nếu có, nếu không thì dùng font mặc định của pygame."""
+    if config.FONT_PATH is not None and config.FONT_PATH.is_file():
+        return pygame.font.Font(str(config.FONT_PATH), size)
+    return pygame.font.Font(None, size)
+
+
 def draw_text(
     surface: pygame.Surface,
     text: str,
@@ -35,7 +42,7 @@ def draw_text(
     color: tuple[int, int, int] = config.COLOR_TEXT,
 ) -> None:
     """Vẽ một dòng chữ căn giữa tại toạ độ `center`."""
-    font = pygame.font.Font(None, size)
+    font = _load_font(size)
     rendered = font.render(text, True, color)
     surface.blit(rendered, rendered.get_rect(center=center))
 
@@ -79,15 +86,26 @@ def draw_food(surface: pygame.Surface, position: tuple[int, int]) -> None:
 
 def draw_score(surface: pygame.Surface, score: int, highscore: int) -> None:
     """Hiển thị điểm hiện tại và điểm cao nhất ở góc màn hình."""
-    font = pygame.font.Font(None, 24)
-    score_text = font.render(f"Diem: {score}", True, config.COLOR_TEXT)
-    highscore_text = font.render(
-        f"Cao nhat: {highscore}", True, config.COLOR_TEXT_DIM
+    bar = pygame.Surface(
+        (config.WINDOW_WIDTH, config.UI_SCORE_BAR_HEIGHT), pygame.SRCALPHA
     )
-    surface.blit(score_text, (10, 7))
+    bar.fill((18, 24, 32, 170))
+    surface.blit(bar, (0, 0))
+
+    font = _load_font(24)
+    score_text = font.render(f"Điểm: {score}", True, config.COLOR_TEXT)
+    highscore_text = font.render(
+        f"Cao nhất: {highscore}", True, config.COLOR_TEXT_DIM
+    )
+
+    text_y = max(5, (config.UI_SCORE_BAR_HEIGHT - score_text.get_height()) // 2)
+    surface.blit(score_text, (config.UI_SCORE_BAR_PADDING, text_y))
     surface.blit(
         highscore_text,
-        (config.WINDOW_WIDTH - highscore_text.get_width() - 10, 7),
+        (
+            config.WINDOW_WIDTH - highscore_text.get_width() - config.UI_SCORE_BAR_PADDING,
+            text_y,
+        ),
     )
 
 
@@ -95,19 +113,25 @@ def draw_menu(surface: pygame.Surface, difficulty_name: str) -> None:
     """Màn hình menu: tên game, hướng dẫn chọn độ khó, phím bắt đầu."""
     _draw_panel(surface, 110, 55, config.WINDOW_WIDTH - 220, config.WINDOW_HEIGHT - 110)
     center_x = config.WINDOW_WIDTH // 2
-    draw_text(surface, "SNAKE GAME", 58, (center_x, 125), config.COLOR_ACCENT)
-    draw_text(surface, "NHOM 3 - UIT", 25, (center_x, 165), config.COLOR_TEXT_DIM)
-    draw_text(surface, "Chon do kho: 1 - De   2 - Thuong   3 - Kho", 24,
-              (center_x, 235), config.COLOR_TEXT)
-    draw_text(surface, f"Do kho: {difficulty_name}", 24,
-              (center_x, 265), config.COLOR_ACCENT)
-    draw_text(surface, "Mui ten / WASD de di chuyen", 22,
-              (center_x, 295), config.COLOR_TEXT_DIM)
-    draw_text(surface, "Nhan SPACE de bat dau", 26,
-              (center_x, 335), config.COLOR_SNAKE_HEAD)
-    draw_text(surface, "ESC de thoat", 20, (center_x, 355), config.COLOR_TEXT_DIM)
-    draw_text(surface, "Ho Van Trong - Le Kieu Diem - Dang Duc Tin", 16,
-              (center_x, 415), config.COLOR_TEXT_DIM)
+    draw_text(surface, "SNAKE GAME", 54, (center_x, 95), config.COLOR_ACCENT)
+    draw_text(surface, "NHÓM 3 - UIT", 24, (center_x, 135), config.COLOR_TEXT_DIM)
+    draw_text(surface, "Chọn độ khó:", 22,
+              (center_x, 175), config.COLOR_TEXT)
+    draw_text(surface, "1 - Dễ   2 - Thường   3 - Khó", 18,
+              (center_x, 210), config.COLOR_TEXT)
+    draw_text(surface, f"Độ khó: {difficulty_name}", 22,
+              (center_x, 245), config.COLOR_ACCENT)
+    draw_text(surface, "Mũi tên / WASD để di chuyển", 20,
+              (center_x, 290), config.COLOR_TEXT_DIM)
+    draw_text(surface, "Nhấn SPACE để bắt đầu", 24,
+              (center_x, 330), config.COLOR_SNAKE_HEAD)
+    draw_text(surface, "ESC để thoát", 18, (center_x, 365), config.COLOR_TEXT_DIM)
+    draw_text(surface, "Hồ Văn Trọng", 15,
+              (center_x - 160, 410), config.COLOR_TEXT_DIM)
+    draw_text(surface, "Lê Kiều Diễm", 15,
+              (center_x, 410), config.COLOR_TEXT_DIM)
+    draw_text(surface, "Đặng Đức Tín", 15,
+              (center_x + 160, 410), config.COLOR_TEXT_DIM)
 
 
 def draw_game_over(
@@ -124,16 +148,16 @@ def draw_game_over(
     _draw_panel(surface, panel_x, panel_y, panel_width, panel_height)
     center_x = config.WINDOW_WIDTH // 2
     draw_text(surface, "GAME OVER", 52, (center_x, panel_y + 55), config.COLOR_FOOD)
-    draw_text(surface, f"Diem cua ban: {score}", 28,
+    draw_text(surface, f"Điểm của bạn: {score}", 28,
               (center_x, panel_y + 110), config.COLOR_TEXT)
-    draw_text(surface, f"Ky luc: {highscore}", 24,
+    draw_text(surface, f"Kỷ lục: {highscore}", 24,
               (center_x, panel_y + 145), config.COLOR_TEXT_DIM)
     if new_record:
-        draw_text(surface, "KY LUC MOI!", 24,
+        draw_text(surface, "KỶ LỤC MỚI!", 24,
                   (center_x, panel_y + 178), config.COLOR_ACCENT)
-    draw_text(surface, "SPACE de choi lai", 24,
+    draw_text(surface, "SPACE để chơi lại", 24,
               (center_x, panel_y + 215), config.COLOR_SNAKE_HEAD)
-    draw_text(surface, "ESC de thoat", 20, (center_x, panel_y + 255), config.COLOR_TEXT_DIM)
+    draw_text(surface, "ESC để thoát", 20, (center_x, panel_y + 255), config.COLOR_TEXT_DIM)
 
 
 def _draw_panel(surface: pygame.Surface, x: int, y: int, width: int, height: int) -> None:

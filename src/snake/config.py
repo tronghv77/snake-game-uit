@@ -21,6 +21,8 @@ WINDOW_TITLE = "Snake Game - Nhom 3 - UIT"
 # --- Giao diện ------------------------------------------------------------
 UI_MARGIN = 2
 UI_OVERLAY_ALPHA = 130
+UI_SCORE_BAR_HEIGHT = 34
+UI_SCORE_BAR_PADDING = 10
 COLOR_PANEL = (12, 17, 24)
 COLOR_PANEL_BORDER = (70, 88, 104)
 COLOR_ACCENT = (255, 205, 92)
@@ -52,6 +54,15 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 ASSETS_DIR = PROJECT_ROOT / "assets"
 SOUNDS_DIR = ASSETS_DIR / "sounds"
 FONTS_DIR = ASSETS_DIR / "fonts"
+FONT_CANDIDATES = [
+    FONTS_DIR / "SegoeUI.ttf",
+    FONTS_DIR / "NotoSansVN-Regular.ttf",
+    FONTS_DIR / "NotoSans-Regular.ttf",
+    Path("C:/Windows/Fonts/SegoeUI.ttf"),
+    Path("C:/Windows/Fonts/segoeui.ttf"),
+    Path("C:/Windows/Fonts/arial.ttf"),
+]
+FONT_PATH = next((path for path in FONT_CANDIDATES if path.exists()), None)
 SOUND_EAT_PATH = SOUNDS_DIR / "eat.wav"
 SOUND_GAME_OVER_PATH = SOUNDS_DIR / "game_over.wav"
 SOUND_ENABLED = True
