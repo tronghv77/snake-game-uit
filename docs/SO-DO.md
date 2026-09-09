@@ -1,7 +1,7 @@
 # Sơ đồ thiết kế
 
 Tài liệu này phục vụ phần "Phân tích và thiết kế" của báo cáo đồ án.
-Cập nhật: 08/09/2026 — khớp với code trên nhánh `main` tại thời điểm này.
+Cập nhật: 09/09/2026 — khớp với code trên nhánh `main` sau khi gộp đủ phần của cả ba thành viên.
 
 Mỗi sơ đồ có hai bản:
 
@@ -124,12 +124,16 @@ classDiagram
         +deque direction_queue
         +Snake snake
         +Food food
+        +Sound sound_eat
+        +Sound sound_game_over
         +reset_round()
         +end_round()
         +handle_events()
         +handle_keydown(key)
         +update(dt)
         +step()
+        +next_head_cell() tuple
+        +hits_wall() bool
         +draw()
         +run()
     }
@@ -155,8 +159,10 @@ classDiagram
         +draw_snake(surface, body)
         +draw_food(surface, position)
         +draw_score(surface, score, highscore)
-        +draw_menu(surface)
-        +draw_game_over(surface, score)
+        +draw_menu(surface, difficulty_name)
+        +draw_game_over(surface, score, highscore, new_record)
+        +load_sound(path) Sound
+        +play_sound(sound)
     }
 
     class config {
@@ -192,12 +198,10 @@ classDiagram
 Nếu bản Word cũ không nhận SVG: mở file SVG bằng trình duyệt, phóng to cỡ 150%
 rồi chụp màn hình. Hoặc mở file trên GitHub, bản Mermaid sẽ được vẽ sẵn để chụp.
 
-## Còn thiếu gì so với code hoàn chỉnh
+## Trạng thái
 
-Hai ô `snake` và `food` trong sơ đồ lớp đang tô mờ kèm ghi chú *chờ T4*. Đây là
-phần `Game` nối với `Snake` và `Food`, chưa làm được vì còn chờ hai lớp đó hoàn
-thiện (issue #2 và #3). Khi xong, bỏ ghi chú *chờ T4* đi là sơ đồ đúng hoàn toàn.
+Sơ đồ khớp hoàn toàn với code trên `main`. Cả ba phần đã gộp xong và game chạy
+được trọn vẹn: rắn di chuyển, ăn mồi, va chạm, tính điểm, lưu kỷ lục, có âm thanh.
 
-Chữ ký `draw_game_over(surface, score)` nhiều khả năng sẽ đổi thành
-`draw_game_over(surface, score, highscore, new_record)` sau khi gộp PR #10 — nhớ
-sửa lại cả hai bản sơ đồ khi việc đó xảy ra.
+Khi sửa code nhớ cập nhật lại cả hai bản sơ đồ — file SVG trong `docs/images/`
+và mã Mermaid ở trên — để sơ đồ không nói một đằng code làm một nẻo.
