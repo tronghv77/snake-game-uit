@@ -26,4 +26,12 @@ class Food:
         # TODO(Diễm): tạo danh sách tất cả các ô hợp lệ trong lưới
         # (0 <= x < config.GRID_WIDTH, 0 <= y < config.GRID_HEIGHT),
         # loại bỏ các ô trong `occupied`, rồi random.choice() một ô.
-        raise NotImplementedError("Chưa cài đặt Food.respawn")
+        # Tạo danh sách tất cả các ô hợp lệ trong lưới
+        all_cells = [(x, y) for x in range(config.GRID_WIDTH) for y in range(config.GRID_HEIGHT)]
+        
+        # Lọc bỏ các ô đang bị thân rắn chiếm dụng
+        available_cells = [cell for cell in all_cells if cell not in occupied]
+        
+        # Chọn ngẫu nhiên một ô trống để đặt mồi mới
+        if available_cells:
+            self.position = random.choice(available_cells)

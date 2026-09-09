@@ -23,7 +23,10 @@ class Snake:
         # TODO(Diễm): khởi tạo self.body gồm `length` đốt nằm ngang,
         # đầu rắn ở (start_x, start_y), các đốt sau nằm bên trái đầu.
         # TODO(Diễm): khởi tạo self.direction = RIGHT
-        raise NotImplementedError("Chưa cài đặt Snake.__init__")
+        # Khởi tạo thân rắn gồm `length` đốt nằm ngang, đầu ở (start_x, start_y) và các đốt sau nằm bên trái
+        self.body = [(start_x - i, start_y) for i in range(length)]
+        # Khởi tạo hướng đi ban đầu là RIGHT
+        self.direction = RIGHT
 
     @property
     def head(self) -> tuple[int, int]:
@@ -37,7 +40,9 @@ class Snake:
         bấm LEFT phải bị bỏ qua, nếu không rắn sẽ tự đâm vào thân mình.
         """
         # TODO(Diễm): chặn trường hợp quay ngược rồi mới gán self.direction
-        raise NotImplementedError("Chưa cài đặt Snake.change_direction")
+        if (self.direction[0] + new_direction[0] == 0) and (self.direction[1] + new_direction[1] == 0):
+            return
+        self.direction = new_direction
 
     def move(self, grow: bool = False) -> None:
         """Đi tới một ô theo hướng hiện tại.
@@ -47,9 +52,13 @@ class Snake:
         """
         # TODO(Diễm): tính ô mới = head + direction, chèn vào đầu self.body.
         # Nếu grow là False thì xoá đốt cuối (self.body.pop()).
-        raise NotImplementedError("Chưa cài đặt Snake.move")
+        new_head = (self.head[0] + self.direction[0], self.head[1] + self.direction[1])
+        self.body.insert(0, new_head)
+        
+        if not grow:
+            self.body.pop()
 
     def hits_self(self) -> bool:
         """Trả về True nếu đầu rắn trùng với một đốt trên thân."""
-        # TODO(Diễm)
-        raise NotImplementedError("Chưa cài đặt Snake.hits_self")
+        # So với body[1:] chứ không phải cả body, vì đầu rắn luôn trùng chính nó.
+        return self.head in self.body[1:]
