@@ -60,5 +60,5 @@ class Snake:
 
     def hits_self(self) -> bool:
         """Trả về True nếu đầu rắn trùng với một đốt trên thân."""
-        # TODO(Diễm)
-       return self.head in self.body[1:]
+        # So với body[1:] chứ không phải cả body, vì đầu rắn luôn trùng chính nó.
+        return self.head in self.body[1:]
