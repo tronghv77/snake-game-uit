@@ -399,3 +399,17 @@ def test_thua_roi_choi_lai_thi_ran_ve_ba_dot(game):
     assert game.score == 0
     assert len(game.snake.body) == 3
     assert game.snake.head == (config.GRID_WIDTH // 2, config.GRID_HEIGHT // 2)
+
+
+def test_may_khong_co_am_thanh_van_choi_duoc(game):
+    """Máy không có thiết bị âm thanh thì load_sound trả về None."""
+    game.sound_eat = None
+    game.sound_game_over = None
+    game.reset_round()
+    game.food.position = game.next_head_cell()
+
+    game.step()          # ăn mồi, lẽ ra kêu tiếng
+    game.end_round()     # thua, lẽ ra kêu tiếng
+
+    assert game.score == config.SCORE_PER_FOOD
+    assert game.state is GameState.GAME_OVER

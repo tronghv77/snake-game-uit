@@ -128,6 +128,11 @@ class Game:
         self.food = Food()
         self.food.respawn(self.snake.body)
 
+        # Nạp âm thanh một lần lúc mở game. Máy không có thiết bị âm thanh thì
+        # load_sound trả về None và game vẫn chạy bình thường, chỉ mất tiếng.
+        self.sound_eat = ui.load_sound(config.SOUND_EAT_PATH)
+        self.sound_game_over = ui.load_sound(config.SOUND_GAME_OVER_PATH)
+
     # --- Bắt đầu và kết thúc một ván --------------------------------------
 
     def reset_round(self) -> None:
@@ -143,6 +148,7 @@ class Game:
     def end_round(self) -> None:
         """Kết thúc ván: chuyển sang GAME_OVER và lưu kỷ lục nếu có."""
         self.state = GameState.GAME_OVER
+        ui.play_sound(self.sound_game_over)
         self.new_record = self.score > self.highscore
         if self.new_record:
             self.highscore = self.score
@@ -235,6 +241,7 @@ class Game:
         if an_duoc_moi:
             self.score += config.SCORE_PER_FOOD
             self.food.respawn(self.snake.body)
+            ui.play_sound(self.sound_eat)
 
         if self.hits_wall() or self.snake.hits_self():
             self.end_round()
