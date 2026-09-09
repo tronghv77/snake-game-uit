@@ -2,12 +2,9 @@
 
 Người phụ trách: Hồ Văn Trọng (26730077)
 
-Tình trạng hiện tại:
-    Đã xong  T1 quản lý trạng thái, T2 nhận phím, T3 nhịp đi, T5 điểm cao nhất.
-    Còn chờ  T4 ăn mồi và va chạm — cần lớp Snake và Food của Diễm.
-
-Mọi chỗ còn thiếu đều được đánh dấu ``TODO(T4)``. Tìm theo từ khoá đó là ra
-đủ các điểm cần nối vào khi phần của Diễm xong.
+Đã xong toàn bộ T1 quản lý trạng thái, T2 nhận phím, T3 nhịp đi, T4 ăn mồi và
+va chạm, T5 điểm cao nhất. Phần vẽ gọi sang module ``ui`` của Tín, phần rắn và
+mồi dùng lớp ``Snake`` và ``Food`` của Diễm.
 """
 
 from __future__ import annotations
@@ -19,7 +16,8 @@ from enum import Enum, auto
 import pygame
 
 from . import config, ui
-from .snake import DOWN, LEFT, RIGHT, UP
+from .food import Food
+from .snake import DOWN, LEFT, RIGHT, UP, Snake
 
 # --- Bảng tra phím ---------------------------------------------------------
 # Dùng dict thay cho một dãy if để dễ thêm phím mới và dễ đọc.
@@ -43,6 +41,9 @@ KEY_TO_DIFFICULTY = {
 
 # Số hướng được xếp hàng chờ. Xem giải thích ở Game.handle_keydown.
 DIRECTION_QUEUE_SIZE = 2
+
+# Ô mà đầu rắn xuất phát: giữa lưới, chừa chỗ bên trái cho thân rắn.
+START_CELL = (config.GRID_WIDTH // 2, config.GRID_HEIGHT // 2)
 
 # Sai số cho phép khi so sánh thời gian. Số thực trong máy tính không chính xác
 # tuyệt đối: 0.05 + 0.04 + 0.01 ra 0.09999999999999999 chứ không phải 0.1. Thiếu
@@ -121,7 +122,11 @@ class Game:
             maxlen=DIRECTION_QUEUE_SIZE
         )
 
-        # TODO(T4): self.snake = Snake(...) và self.food = Food()
+        # Tạo sẵn rắn và mồi ngay từ đầu để mọi hàm khác luôn có cái mà dùng,
+        # kể cả khi người chơi còn đang ở màn hình menu.
+        self.snake = Snake(*START_CELL)
+        self.food = Food()
+        self.food.respawn(self.snake.body)
 
     # --- Bắt đầu và kết thúc một ván --------------------------------------
 
@@ -131,9 +136,9 @@ class Game:
         self.new_record = False
         self.move_timer = 0.0
         self.direction_queue.clear()
+        self.snake = Snake(*START_CELL)
+        self.food.respawn(self.snake.body)
         self.state = GameState.PLAYING
-
-        # TODO(T4): tạo lại self.snake ở giữa lưới và gọi self.food.respawn()
 
     def end_round(self) -> None:
         """Kết thúc ván: chuyển sang GAME_OVER và lưu kỷ lục nếu có."""
@@ -211,15 +216,39 @@ class Game:
             self.step()
 
     def step(self) -> None:
-        """Cho rắn đi đúng một bước."""
-        if self.direction_queue:
-            _next_direction = self.direction_queue.popleft()
-            # TODO(T4): self.snake.change_direction(_next_direction)
+        """Cho rắn đi đúng một bước.
 
-        # TODO(T4): tính ô đầu rắn sắp tới, so với self.food.position để biết
-        # có ăn được không, gọi self.snake.move(grow), cộng điểm và sinh mồi
-        # mới, rồi kiểm tra va chạm tường và self.snake.hits_self() —
-        # trúng thì gọi self.end_round().
+        Thứ tự ở đây quan trọng. Phải biết trước ô sắp tới có phải miếng mồi
+        không rồi mới cho rắn đi, vì lúc đi mới quyết định được là bỏ đuôi hay
+        giữ lại. Và phải sinh mồi mới *sau khi* rắn đã dài ra, nếu không mồi
+        có thể rơi trúng ngay dưới bụng rắn.
+        """
+        # Mỗi bước chỉ lấy ra một hướng, xem giải thích ở Game.handle_keydown.
+        if self.direction_queue:
+            self.snake.change_direction(self.direction_queue.popleft())
+
+        next_cell = self.next_head_cell()
+        an_duoc_moi = next_cell == self.food.position
+
+        self.snake.move(grow=an_duoc_moi)
+
+        if an_duoc_moi:
+            self.score += config.SCORE_PER_FOOD
+            self.food.respawn(self.snake.body)
+
+        if self.hits_wall() or self.snake.hits_self():
+            self.end_round()
+
+    def next_head_cell(self) -> tuple[int, int]:
+        """Ô mà đầu rắn sẽ tới ở bước kế tiếp."""
+        head_x, head_y = self.snake.head
+        dx, dy = self.snake.direction
+        return head_x + dx, head_y + dy
+
+    def hits_wall(self) -> bool:
+        """Trả về True nếu đầu rắn đã ra khỏi lưới."""
+        x, y = self.snake.head
+        return not (0 <= x < config.GRID_WIDTH and 0 <= y < config.GRID_HEIGHT)
 
     # --- Vẽ ----------------------------------------------------------------
 
@@ -228,108 +257,42 @@ class Game:
         ui.draw_grid(self.screen)
 
         if self.state is GameState.MENU:
-            self.draw_menu_tam()
+            ui.draw_menu(self.screen, self.difficulty_name)
+            pygame.display.flip()
+            return
+
+        # Ba trạng thái còn lại đều vẽ sân chơi trước, chỉ khác lớp phủ ở trên.
+        ui.draw_snake(self.screen, self.snake.body)
+        ui.draw_food(self.screen, self.food.position)
+        ui.draw_score(self.screen, self.score, self.highscore)
+
+        if self.state is GameState.PAUSED:
+            self.draw_paused_overlay()
         elif self.state is GameState.GAME_OVER:
-            self.draw_game_over_tam()
-        else:
-            self.draw_playing_tam()
+            ui.draw_game_over(
+                self.screen, self.score, self.highscore, self.new_record
+            )
 
         pygame.display.flip()
 
-    # Ba hàm dưới đây chỉ là màn hình tạm để chạy thử phần trạng thái. Khi Tín
-    # làm xong N3, N4, N5 thì xoá cả ba và gọi thẳng ui.draw_menu(),
-    # ui.draw_game_over(), ui.draw_snake(), ui.draw_food(), ui.draw_score().
-    #
-    # Chữ ở đây cố tình viết không dấu vì font mặc định của pygame không có
-    # glyph tiếng Việt, để nguyên dấu sẽ ra ô vuông. Tín nạp font riêng ở N6
-    # xong thì viết lại có dấu được.
+    def draw_paused_overlay(self) -> None:
+        """Lớp phủ mờ kèm chữ TAM DUNG khi người chơi bấm P.
 
-    def draw_menu_tam(self) -> None:
-        cx = config.WINDOW_WIDTH // 2
-        ui.draw_text(self.screen, "SNAKE GAME", 64, (cx, 90))
-        ui.draw_text(
-            self.screen, "Nhom 3 - UIT", 26, (cx, 130), config.COLOR_TEXT_DIM
-        )
-        ui.draw_text(
-            self.screen, f"Do kho: {self.difficulty_name}", 34, (cx, 200)
-        )
-        ui.draw_text(
-            self.screen,
-            "1 - De     2 - Thuong     3 - Kho",
-            24,
-            (cx, 235),
-            config.COLOR_TEXT_DIM,
-        )
-        ui.draw_text(self.screen, "SPACE de bat dau", 30, (cx, 300))
-        ui.draw_text(
-            self.screen,
-            "Mui ten hoac WASD de dieu khien - P tam dung - ESC thoat",
-            20,
-            (cx, 335),
-            config.COLOR_TEXT_DIM,
-        )
-        ui.draw_text(
-            self.screen,
-            f"Ky luc: {self.highscore}",
-            24,
-            (cx, 385),
-            config.COLOR_TEXT_DIM,
-        )
-        ui.draw_text(
-            self.screen,
-            "Ho Van Trong - Le Kieu Diem - Dang Duc Tin",
-            20,
-            (cx, config.WINDOW_HEIGHT - 25),
-            config.COLOR_TEXT_DIM,
-        )
+        Chữ viết không dấu vì font mặc định của pygame không có glyph tiếng
+        Việt. Khi Tín nạp font riêng vào assets/fonts/ thì viết lại có dấu được.
+        """
+        overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
+        overlay.fill((*config.COLOR_BACKGROUND, config.UI_OVERLAY_ALPHA))
+        self.screen.blit(overlay, (0, 0))
 
-    def draw_playing_tam(self) -> None:
-        cx = config.WINDOW_WIDTH // 2
+        center_x = config.WINDOW_WIDTH // 2
+        center_y = config.WINDOW_HEIGHT // 2
+        ui.draw_text(self.screen, "TAM DUNG", 56, (center_x, center_y - 20))
         ui.draw_text(
             self.screen,
-            f"Diem: {self.score}    Ky luc: {self.highscore}",
-            26,
-            (cx, 24),
-        )
-        ui.draw_text(
-            self.screen,
-            "Cho lop Snake va Food cua Diem (issue #2, #3)",
+            "Nhan P de choi tiep",
             24,
-            (cx, config.WINDOW_HEIGHT // 2),
-            config.COLOR_TEXT_DIM,
-        )
-        if self.state is GameState.PAUSED:
-            ui.draw_text(
-                self.screen, "TAM DUNG", 56, (cx, config.WINDOW_HEIGHT // 2 - 60)
-            )
-            ui.draw_text(
-                self.screen,
-                "P de choi tiep",
-                24,
-                (cx, config.WINDOW_HEIGHT // 2 - 20),
-                config.COLOR_TEXT_DIM,
-            )
-
-    def draw_game_over_tam(self) -> None:
-        cx = config.WINDOW_WIDTH // 2
-        cy = config.WINDOW_HEIGHT // 2
-        ui.draw_text(self.screen, "GAME OVER", 64, (cx, cy - 70))
-        ui.draw_text(self.screen, f"Diem: {self.score}", 34, (cx, cy - 10))
-        if self.new_record:
-            ui.draw_text(self.screen, "KY LUC MOI!", 30, (cx, cy + 30))
-        else:
-            ui.draw_text(
-                self.screen,
-                f"Ky luc: {self.highscore}",
-                26,
-                (cx, cy + 30),
-                config.COLOR_TEXT_DIM,
-            )
-        ui.draw_text(
-            self.screen,
-            "SPACE de choi lai - ESC de thoat",
-            24,
-            (cx, cy + 85),
+            (center_x, center_y + 25),
             config.COLOR_TEXT_DIM,
         )
 
