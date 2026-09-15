@@ -16,8 +16,8 @@ Tài liệu này dành cho thành viên chưa quen dùng Git. Làm theo đúng t
 Sau đó mở Terminal (hoặc PowerShell) và khai báo danh tính:
 
 ```bash
-git config --global user.name "Ho Van Trong"
-git config --global user.email "tronghv77@gmail.com"
+git config --global user.name "Nguyen Van A"
+git config --global user.email "email-cua-ban@gmail.com"
 ```
 
 > Thay bằng tên và email của chính bạn.

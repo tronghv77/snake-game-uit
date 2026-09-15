@@ -2,11 +2,11 @@
 
 ## Thông tin nhóm
 
-| Họ và tên | MSSV | Email | Điện thoại | Vai trò |
-|-----------|------|-------|------------|---------|
-| Hồ Văn Trọng | 26730077 | tronghv77@gmail.com | 0936099625 | Nhóm trưởng |
-| Lê Kiều Diễm | 26730010 | lekieudiem368@gmail.com | 0774456146 | Thành viên |
-| Đặng Đức Tín | 26730073 | ductin0925@gmail.com | 0988576749 | Thành viên |
+| Họ và tên | MSSV | GitHub | Vai trò |
+|-----------|------|--------|---------|
+| Hồ Văn Trọng | 26730077 | @tronghv77 | Nhóm trưởng |
+| Lê Kiều Diễm | 26730010 | @Lekieudiem26730010 | Thành viên |
+| Đặng Đức Tín | 26730073 | @26730073 | Thành viên |
 
 ---
 

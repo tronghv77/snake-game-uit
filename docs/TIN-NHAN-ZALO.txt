@@ -11,9 +11,7 @@ Mọi người làm giúp mình 4 việc sau trong hôm nay nha:
 1️⃣ TẠO TÀI KHOẢN GITHUB
 Vào https://github.com/signup
 ⚠️ Quan trọng: đăng ký bằng ĐÚNG email dưới đây, để commit ghi nhận đúng tên từng người khi thầy/cô chấm điểm:
-• Trọng: tronghv77@gmail.com
-• Diễm: lekieudiem368@gmail.com
-• Tín: ductin0925@gmail.com
+• Mỗi người dùng email cá nhân đã đăng ký với nhóm
 
 2️⃣ NHẮN LẠI USERNAME GITHUB CHO MÌNH
 Tạo xong thì gửi username vào nhóm (dạng @tenban). Mình cần username mới mời vào repo được.
@@ -106,7 +104,7 @@ https://github.com/tronghv77/snake-game-uit
 Diễm làm giúp mình 3 bước này nha, tầm 15 phút thôi:
 
 1. Tạo tài khoản GitHub: https://github.com/signup
-   ⚠️ Nhớ đăng ký bằng đúng email lekieudiem368@gmail.com
+   ⚠️ Nhớ đăng ký bằng đúng email Diễm đã đăng ký với nhóm
    Vì lúc chấm điểm thầy/cô nhìn vào commit để biết ai làm gì, sai email là công của Diễm không được tính.
 
 2. Tạo xong nhắn lại username GitHub cho mình (kiểu @tenban).
@@ -136,7 +134,7 @@ https://github.com/tronghv77/snake-game-uit
 Tín làm giúp mình 3 bước, tầm 15 phút:
 
 1. Tạo tài khoản GitHub: https://github.com/signup
-   ⚠️ Nhớ đăng ký bằng đúng email ductin0925@gmail.com
+   ⚠️ Nhớ đăng ký bằng đúng email Tín đã đăng ký với nhóm
    Lúc chấm thầy/cô nhìn commit để biết ai làm gì, sai email là công của Tín không được tính.
 
 2. Tạo xong nhắn username GitHub cho mình (kiểu @tenban).
